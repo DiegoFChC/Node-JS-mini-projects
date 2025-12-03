@@ -54,6 +54,8 @@ You will see a prompt like:
 
 Type any command and press ENTER. (Example: `--help`)
 
+![Console](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/Console/Screenshot%20console.png?raw=true)
+
 ## ▶️ How to Run (Text File Mode)
 
 This mode watches a .txt file and executes commands when it changes.
@@ -71,6 +73,8 @@ node index_text_file.js
 ```
 
 The shell detects the change **when you save** and executes it.
+
+![Text file](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/Console/Screenshot%20text%20file.png?raw=true)
 
 ## 📜 License
 
