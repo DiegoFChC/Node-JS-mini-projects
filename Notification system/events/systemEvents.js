@@ -1,0 +1,1 @@
+// Handles system-level events (errors, warnings, logs)
