@@ -54,7 +54,7 @@ Then you can trigger events manually:
 
 Type any command and press ENTER. (Example: `help`)
 
-![Console](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/Console/Screenshot%20console.png?raw=true)
+![Console](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/Notification%20system/console.png?raw=true)
 
 ## 📜 License
 
