@@ -15,11 +15,14 @@ The goal of this folder is to practice Node.js through practical and incremental
 
 ## 📌 Current Projects
 
-1. **Custom Console (Two Versions)**
+1. **💻 Custom Console (Two Versions)**
 A small custom shell written in Node.js, built in two modes:
 
 * `index_consola.js`: Reads user commands directly from the terminal using readline.
 * `index_text_file.js`: Uses a .txt file as a simulated console, detecting changes with fs.watch.
+
+2. **🔔 Node Notification System (v1)**
+A small notification system built with Node.js using the native `EventEmitter`.
 
 ## 🧑‍💻 Author
 
