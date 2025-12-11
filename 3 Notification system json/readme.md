@@ -1,4 +1,4 @@
-# 🔔 Node Notification System (v1)
+# 🔔 Node Notification System (v2) - Persistence - Logs
 
 A modular notification system built with Node.js, designed to learn event-driven architecture, persistence, and logging using the native EventEmitter.
 
@@ -70,7 +70,7 @@ Then you can trigger events manually:
 
 Type any command and press ENTER. (Example: `help`)
 
-![Console](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/Notification%20system%20json/console.png?raw=true)
+![Console](https://github.com/DiegoFChC/Node-JS-mini-projects/blob/main/3%20Notification%20system%20json/console.png?raw=true)
 
 ## 📜 License
 
