@@ -24,6 +24,9 @@ A small custom shell written in Node.js, built in two modes:
 2. **🔔 Node Notification System (v1)**
 A small notification system built with Node.js using the native `EventEmitter`.
 
+3. **🔔 Node Notification System (v2) - Persistence - Logs**
+A modular notification system built with Node.js, designed to learn event-driven architecture, persistence, and logging using the native EventEmitter.
+
 ## 🧑‍💻 Author
 
 [Diego F. Chaverra C.](https://github.com/DiegoFChC)
