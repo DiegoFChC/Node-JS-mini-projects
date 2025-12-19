@@ -1,0 +1,20 @@
+[
+  {
+    "id": "842509ea-ddfc-47c7-83d9-66e93627f551",
+    "name": "Diego",
+    "lastname": "Chaverra",
+    "email": "diego@gmail.com"
+  },
+  {
+    "id": "634f1e52-6346-4053-ae3b-ba26854ec48f",
+    "name": "Ana",
+    "lastname": "Sanchex",
+    "email": "ana@gmail.com"
+  },
+  {
+    "id": "57914611-2d9d-497b-a6a9-e18494623655",
+    "name": "Carlos",
+    "lastname": "Gaviria",
+    "email": "carlos@gmail.com"
+  }
+]

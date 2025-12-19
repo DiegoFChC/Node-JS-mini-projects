@@ -1,0 +1,13 @@
+{
+  "name": "4-users-api-rest",
+  "version": "1.0.0",
+  "description": "```bash\r /\r │ index.js                    # Entry point (crea el servidor)\r │\r ├── server/\r │   ├── server.js             # Configuración del servidor HTTP\r │   └── router.js             # Routing manual (método + URL)\r │\r ├── routes/\r │   └── users.routes.js       # Rutas relacionadas a usuarios\r │\r ├── controllers/\r │   └── users.controller.js   # Lógica de cada endpoint\r │\r ├── services/\r │   └── users.service.js      # Lógica de negocio\r │\r ├── data/\r │   └── users.json            # \"Base de datos\"\r │\r ├── utils/\r │   ├── bodyParser.js         # Parseo del body\r │   ├── sendResponse.js       # Helper para responder\r │   └── urlParser.js          # Parse de URL y query params\r │\r └── errors/\r     └── httpErrors.js         # Errores HTTP reutilizables\r ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
