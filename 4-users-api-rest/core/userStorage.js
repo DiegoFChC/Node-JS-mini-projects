@@ -1,5 +1,6 @@
 const { join } = require('node:path')
 const { readFile, writeFile } = require('node:fs/promises')
+const crypto = require('node:crypto')
 
 const PATH_DATA = join(process.cwd(), 'data', 'users.json')
 
@@ -12,16 +13,48 @@ async function readData() {
   }
 }
 
-function getAllUsers() {
-  return readData()
+async function writeData(data) {
+  try {
+    await writeFile(PATH_DATA, JSON.stringify(data))
+  } catch (err) {
+    console.log(err)
+    throw new Error('An error has ocurred while writing data')
+  }
+}
+
+async function getAllUsers(page, limit) {
+  const users = await readData()
+  const result = {
+    page: page ?? '',
+    limit: limit ?? '',
+    total: users.length,
+    results: users,
+  }
+  if (page !== null && limit !== null){
+    const startIndex = (page - 1) * limit // offset
+    const endIndex = startIndex + limit
+    result.results = users.slice(startIndex, endIndex)
+  }
+  return result
 }
 
 async function getUserById(id) {
   const data = await readData()
   if (data) {
-    const user = data.find(user => user.id === id)
+    const user = data.find((user) => user.id === id)
     return user ?? null
   }
 }
 
-module.exports = { getAllUsers, getUserById }
+async function createUser(data) {
+  const users = await readData()
+  const newUser = {
+    id: crypto.randomUUID(),
+    ...data
+  }
+  users.push(newUser)
+  await writeData(users)
+  return newUser
+}
+
+module.exports = { getAllUsers, getUserById, createUser }
