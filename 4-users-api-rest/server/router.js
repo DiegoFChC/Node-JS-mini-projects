@@ -1,5 +1,5 @@
 const { urlParser } = require('../utils/urlParser')
-const { getUser, getUsers, postUser } = require('../routes/users.routes')
+const { getUser, getUsers, postUser, putUser, patchUser } = require('../routes/users.routes')
 const { ok, notFound, badRequest } = require('../utils/sendResponse')
 
 async function router(req, res) {
@@ -19,6 +19,12 @@ async function router(req, res) {
       }
       if (method === 'POST' && !urlParts[1]) {
         return postUser(req, res, contentType)
+      }
+      if (method === 'PUT' && urlParts[1]) {
+        return putUser(req, res, urlParts[1], contentType)
+      }
+      if (method === 'PATCH' && urlParts[1]) {
+        return patchUser(req, res, urlParts[1], contentType)
       }
     }
     notFound(res)

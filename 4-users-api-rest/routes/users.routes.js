@@ -1,5 +1,5 @@
-const { getAllUsers, getUserById, createUser } = require('../core/userStorage')
-const { validUUID } = require('../utils/utils')
+const { getAllUsers, getUserById, createUser, updateUserById, patchUserById } = require('../core/userStorage')
+const { validUUID, validateFields } = require('../utils/utils')
 const { bodyParser } = require('../utils/bodyParser')
 const {
   badRequest,
@@ -60,19 +60,75 @@ async function postUser(req, res, contentType) {
     return unsupportedMedia(res)
   }
 
-  await bodyParser(req, res)
-  const { name, lastname, email } = req.body
+  try {
+    await bodyParser(req, res)
+    const { name, lastname, email } = req.body
+  
+    if (!name || !lastname || !email) {
+      return badRequest(res, 'name, lastname and email are necesary')
+    }
+  
+    const newUser = await createUser({ name, lastname, email })
+    created(res, newUser)
+  } catch (err) {
+    return badRequest(res, err.message)
+  }
+}
 
-  if (!name || !lastname || !email) {
-    return badRequest(res, 'name, lastname and email are necesary')
+async function putUser(req, res, id, contentType) {
+  if (!validUUID(id)) {
+    return badRequest(res, 'Invalid user id')
   }
 
-  const newUser = await createUser({ name, lastname, email })
-  created(res, newUser)
+  if (!contentType?.includes('application/json')) {
+    return unsupportedMedia(res)
+  }
+
+  try {
+    await bodyParser(req, res)
+    const { name, lastname, email } = req.body
+    if (!name || !lastname || !email) {
+      return badRequest(res, 'name, lastname and email are necesary')
+    }
+    
+    const updatedUser = await updateUserById(id, { name, lastname, email })
+
+    ok(res, updatedUser)
+  } catch (err) {
+    return badRequest(res, err.message)
+  }
+}
+
+async function patchUser(req, res, id, contentType) {
+  if (!validUUID(id)) {
+    return badRequest(res, 'Invalid user id')
+  }
+
+  if (!contentType?.includes('application/json')) {
+    return unsupportedMedia(res)
+  }
+
+  try {
+    await bodyParser(req, res)
+    const { name, lastname, email } = req.body
+    if (!name && !lastname && !email) {
+      return badRequest(res, 'At least one field is required')
+    }
+
+    const newFields = validateFields(req.body, ['name', 'lastname', 'email'])
+
+    const updatedUser = await patchUserById(id, newFields)
+
+    ok(res, updatedUser)
+  } catch (err) {
+    return badRequest(res, err.message)
+  }
 }
 
 module.exports = {
   getUsers,
   getUser,
-  postUser
+  postUser,
+  putUser,
+  patchUser
 }

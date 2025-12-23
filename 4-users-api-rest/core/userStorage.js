@@ -30,7 +30,7 @@ async function getAllUsers(page, limit) {
     total: users.length,
     results: users,
   }
-  if (page !== null && limit !== null){
+  if (page !== null && limit !== null) {
     const startIndex = (page - 1) * limit // offset
     const endIndex = startIndex + limit
     result.results = users.slice(startIndex, endIndex)
@@ -50,11 +50,47 @@ async function createUser(data) {
   const users = await readData()
   const newUser = {
     id: crypto.randomUUID(),
-    ...data
+    ...data,
   }
   users.push(newUser)
   await writeData(users)
   return newUser
 }
 
-module.exports = { getAllUsers, getUserById, createUser }
+async function updateUserById(id, data) {
+  const user = await getUserById(id)
+  if (!user) throw new Error('User id not found')
+
+  const newData = { id, ...data }
+  const users = await readData()
+  const userIndex = users.findIndex((item) => item.id === id)
+
+  if (userIndex === -1) throw new Error('User index not found')
+
+  users[userIndex] = newData
+  await writeData(users)
+  return newData
+}
+
+async function patchUserById(id, data) {
+  const user = await getUserById(id)
+  if (!user) throw new Error('User id not found')
+
+  const newData = { ...user, ...data }
+  const users = await readData()
+  const userIndex = users.findIndex((item) => item.id === id)
+
+  if (userIndex === -1) throw new Error('User index not found')
+
+  users[userIndex] = newData
+  await writeData(users)
+  return newData
+}
+
+module.exports = {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUserById,
+  patchUserById,
+}
