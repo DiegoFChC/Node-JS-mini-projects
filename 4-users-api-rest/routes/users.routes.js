@@ -47,10 +47,6 @@ async function getUsers(req, res, searchParams) {
 }
 
 async function getUser(req, res, id) {
-  if (!validUUID(id)) {
-    return badRequest(res, 'Invalid user id')
-  }
-
   try {
     const user = await getUserById(id)
     ok(res, user)
@@ -59,15 +55,10 @@ async function getUser(req, res, id) {
   }
 }
 
-async function postUser(req, res, contentType) {
-  if (!contentType?.includes('application/json')) {
-    return unsupportedMedia(res)
-  }
-
+async function postUser(req, res) {
   try {
     await bodyParser(req, res)
     const { name, lastname, email } = req.body
-  
     if (!name || !lastname || !email) {
       return badRequest(res, 'name, lastname and email are necesary')
     }
@@ -79,15 +70,7 @@ async function postUser(req, res, contentType) {
   }
 }
 
-async function putUser(req, res, id, contentType) {
-  if (!validUUID(id)) {
-    return badRequest(res, 'Invalid user id')
-  }
-
-  if (!contentType?.includes('application/json')) {
-    return unsupportedMedia(res)
-  }
-
+async function putUser(req, res, id) {
   try {
     await bodyParser(req, res)
     const { name, lastname, email } = req.body
@@ -103,15 +86,7 @@ async function putUser(req, res, id, contentType) {
   }
 }
 
-async function patchUser(req, res, id, contentType) {
-  if (!validUUID(id)) {
-    return badRequest(res, 'Invalid user id')
-  }
-
-  if (!contentType?.includes('application/json')) {
-    return unsupportedMedia(res)
-  }
-
+async function patchUser(req, res, id) {
   try {
     await bodyParser(req, res)
     const { name, lastname, email } = req.body
@@ -130,10 +105,6 @@ async function patchUser(req, res, id, contentType) {
 }
 
 async function deleteUser(req, res, id) {
-  if (!validUUID(id)) {
-    return badRequest(res, 'Invalid user id')
-  }
-
   try {
     await deleteUserById(id)
     okNoContent(res)
