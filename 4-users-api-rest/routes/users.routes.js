@@ -1,12 +1,12 @@
-const { getAllUsers, getUserById, createUser, updateUserById, patchUserById } = require('../core/userStorage')
+const { getAllUsers, getUserById, createUser, updateUserById, patchUserById, deleteUserById } = require('../core/userStorage')
 const { validUUID, validateFields } = require('../utils/utils')
 const { bodyParser } = require('../utils/bodyParser')
 const {
   badRequest,
   created,
-  notFound,
   ok,
   unsupportedMedia,
+  okNoContent
 } = require('../utils/sendResponse')
 
 async function getUsers(req, res, searchParams) {
@@ -38,8 +38,12 @@ async function getUsers(req, res, searchParams) {
     }
   }
 
-  const data = await getAllUsers(pageFilter, limitFilter)
-  ok(res, data)
+  try {
+    const data = await getAllUsers(pageFilter, limitFilter)
+    ok(res, data)
+  } catch (err) {
+    badRequest(res, err.message)
+  }
 }
 
 async function getUser(req, res, id) {
@@ -47,12 +51,12 @@ async function getUser(req, res, id) {
     return badRequest(res, 'Invalid user id')
   }
 
-  const user = await getUserById(id)
-  if (!user) {
-    return notFound(res, 'User id not found')
+  try {
+    const user = await getUserById(id)
+    ok(res, user)
+  } catch (err) {
+    badRequest(res, err.message)
   }
-
-  ok(res, user)
 }
 
 async function postUser(req, res, contentType) {
@@ -125,10 +129,24 @@ async function patchUser(req, res, id, contentType) {
   }
 }
 
+async function deleteUser(req, res, id) {
+  if (!validUUID(id)) {
+    return badRequest(res, 'Invalid user id')
+  }
+
+  try {
+    await deleteUserById(id)
+    okNoContent(res)
+  } catch (err) {
+    badRequest(res, err.message)
+  }
+}
+
 module.exports = {
   getUsers,
   getUser,
   postUser,
   putUser,
-  patchUser
+  patchUser,
+  deleteUser
 }

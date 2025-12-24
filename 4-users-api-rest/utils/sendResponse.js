@@ -5,6 +5,8 @@ function send(res, status, data) {
 }
 
 const ok = (res, data) => send(res, 200, data)
+const okNoContent = (res) => 
+  send(res, 204, {})
 const created = (res, data) =>
   send(res, 201, { message: 'Created successfully', result: data })
 const badRequest = (res, message = 'Bad request') =>
@@ -13,6 +15,8 @@ const notFound = (res, message = 'Not found') =>
   send(res, 404, { message })
 const unsupportedMedia = (res) =>
   send(res, 415, { message: 'Unsupported Media Type' })
+const internalServerError = (res) =>
+  send(res, 500, { message: 'Internal Server Error' })
 
 module.exports = {
   ok,
@@ -20,4 +24,6 @@ module.exports = {
   badRequest,
   notFound,
   unsupportedMedia,
+  okNoContent,
+  internalServerError
 }

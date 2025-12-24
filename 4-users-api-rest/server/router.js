@@ -1,35 +1,39 @@
 const { urlParser } = require('../utils/urlParser')
-const { getUser, getUsers, postUser, putUser, patchUser } = require('../routes/users.routes')
-const { ok, notFound, badRequest } = require('../utils/sendResponse')
+const { getUser, getUsers, postUser, putUser, patchUser, deleteUser } = require('../routes/users.routes')
+const { ok, notFound, internalServerError } = require('../utils/sendResponse')
 
 async function router(req, res) {
   const { url, method, contentType, urlParts, searchParams } = urlParser(req, res)
+  const [urlBase, userId] = urlParts
 
   try {
     if (method === 'GET' && url === '/')   {
       return ok(res, { message: 'Welcome to my server' })
     }
 
-    if (urlParts[0] === 'users') {
-      if (method === 'GET' && urlParts[1]) {
-        return getUser(req, res, urlParts[1])
+    if (urlBase === 'users') {
+      if (method === 'GET' && userId) {
+        return getUser(req, res, userId)
       }
       if (method === 'GET') {
         return getUsers(req, res, searchParams)
       }
-      if (method === 'POST' && !urlParts[1]) {
+      if (method === 'POST' && !userId) {
         return postUser(req, res, contentType)
       }
-      if (method === 'PUT' && urlParts[1]) {
-        return putUser(req, res, urlParts[1], contentType)
+      if (method === 'PUT' && userId) {
+        return putUser(req, res, userId, contentType)
       }
-      if (method === 'PATCH' && urlParts[1]) {
-        return patchUser(req, res, urlParts[1], contentType)
+      if (method === 'PATCH' && userId) {
+        return patchUser(req, res, userId, contentType)
+      }
+      if (method === 'DELETE' && userId) {
+        return deleteUser(req, res, userId)
       }
     }
     notFound(res)
   } catch (err) {
-    badRequest(res, err.message)
+    internalServerError(res)
   }
 }
 

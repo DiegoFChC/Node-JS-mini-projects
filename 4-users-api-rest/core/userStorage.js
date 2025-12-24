@@ -42,7 +42,8 @@ async function getUserById(id) {
   const data = await readData()
   if (data) {
     const user = data.find((user) => user.id === id)
-    return user ?? null
+    if (!user) throw new Error('User id not found')
+    return user
   }
 }
 
@@ -58,8 +59,7 @@ async function createUser(data) {
 }
 
 async function updateUserById(id, data) {
-  const user = await getUserById(id)
-  if (!user) throw new Error('User id not found')
+  await getUserById(id)
 
   const newData = { id, ...data }
   const users = await readData()
@@ -74,7 +74,6 @@ async function updateUserById(id, data) {
 
 async function patchUserById(id, data) {
   const user = await getUserById(id)
-  if (!user) throw new Error('User id not found')
 
   const newData = { ...user, ...data }
   const users = await readData()
@@ -87,10 +86,20 @@ async function patchUserById(id, data) {
   return newData
 }
 
+async function deleteUserById(id) {
+  await getUserById(id)
+
+  const users = await readData()
+  const newUsers = users.filter((item) => item.id !== id)
+
+  await writeData(newUsers)
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUserById,
   patchUserById,
+  deleteUserById
 }
