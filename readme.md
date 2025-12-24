@@ -27,6 +27,9 @@ A small notification system built with Node.js using the native `EventEmitter`.
 3. **🔔 Node Notification System (v2) - Persistence - Logs**
 A modular notification system built with Node.js, designed to learn event-driven architecture, persistence, and logging using the native EventEmitter.
 
+4. **🧩 Node REST API**
+A simple REST API built with Node.js using only native modules (http, fs, url, etc.), without Express or any external framework.
+
 ## 🧑‍💻 Author
 
 [Diego F. Chaverra C.](https://github.com/DiegoFChC)
