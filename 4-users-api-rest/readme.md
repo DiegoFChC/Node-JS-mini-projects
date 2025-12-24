@@ -53,14 +53,15 @@ Perfect for learning how to create a basic server with Node.js
 
 ## 🔀 API Endpoints
 
-| Method | Endpoint     | Description                     |
-| ------ | ------------ | ------------------------------- |
-| GET    | `/users`     | Get all users (with pagination) |
-| GET    | `/users/:id` | Get user by ID                  |
-| POST   | `/users`     | Create new user                 |
-| PUT    | `/users/:id` | Replace user (full update)      |
-| PATCH  | `/users/:id` | Partial update                  |
-| DELETE | `/users/:id` | Delete user                     |
+| Method | Endpoint                     | Description                     |
+| ------ | ---------------------------- | ------------------------------- |
+| GET    | `/users`                     | Get all users                   |
+| GET    | `/users?page=2&limit=5`      | Get all users (with pagination) |
+| GET    | `/users/:id`                 | Get user by ID                  |
+| POST   | `/users`                     | Create new user                 |
+| PUT    | `/users/:id`                 | Replace user (full update)      |
+| PATCH  | `/users/:id`                 | Partial update                  |
+| DELETE | `/users/:id`                 | Delete user                     |
 
 ## 📦 Request Body (POST / PUT / PATCH)
 
