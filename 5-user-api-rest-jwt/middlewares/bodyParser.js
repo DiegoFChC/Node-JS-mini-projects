@@ -13,12 +13,10 @@ function bodyParser(req, res, next) {
 
   req.on('end', () => {
     if (body.length === 0) {
-      console.log('ajam3....')
       badRequest(res, 'Data not received')
     }
     try {
       req.body = body ? JSON.parse(body) : {}
-      console.log(body)
       next()
     } catch {
       badRequest(res, 'Invalid JSON format')

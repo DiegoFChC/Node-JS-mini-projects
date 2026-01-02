@@ -1,0 +1,20 @@
+[
+  {
+    "id": "5026b661-6486-46e2-b4d2-284c0b9dd665",
+    "name": "Lana",
+    "lastname": "Mina",
+    "email": "lana.mina@gmail.com",
+    "password": "f75b9cd38ad34575ad553094b40d6e35:b3db17604d31d603c21a4553f539534e11761c1008b022dfac8171e97d4581d715696f6573b06c4789c4b63bb4e17b2499ce7cf173ddb7cced830dd15e611f8b",
+    "createdAt": "2026-01-02T20:54:05.898Z",
+    "role": "user"
+  },
+  {
+    "id": "b7fe75b6-49a5-4b7c-b396-e7e2f55a566e",
+    "name": "Diego",
+    "lastname": "Chaverra",
+    "email": "diego.chaverra@gmail.com",
+    "password": "3854609d181dc4ce9d3b20b282bc00ec:ce320f1c2cb3f619e8fd8c61389f8e79f429a76282f5fbbebbb17ada0854422d0aebe0c2c896af2cc2b7fe7530a18d9f282b08fd5bb2fca38ebcf8dc64f05557",
+    "createdAt": "2026-01-02T20:54:34.296Z",
+    "role": "admin"
+  }
+]

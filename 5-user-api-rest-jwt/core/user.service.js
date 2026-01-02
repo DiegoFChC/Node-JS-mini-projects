@@ -1,39 +1,21 @@
-const { join } = require('node:path')
-const { readFile, writeFile } = require('node:fs/promises')
-const crypto = require('node:crypto')
-
-const PATH_DATA = join(process.cwd(), 'data', 'users.json')
-
-async function readData() {
-  try {
-    const data = await readFile(PATH_DATA, 'utf8')
-    return data !== '' ? JSON.parse(data) : []
-  } catch {
-    throw new Error('An error has ocurred while loading data')
-  }
-}
-
-async function writeData(data) {
-  try {
-    await writeFile(PATH_DATA, JSON.stringify(data))
-  } catch (err) {
-    console.log(err)
-    throw new Error('An error has ocurred while writing data')
-  }
-}
+const { readData, writeData } = require('./storage.service')
 
 async function getAllUsers(page, limit) {
   const users = await readData()
+  const usersClear = users.map((user) => {
+    const { id, name, lastname, email, role } = user
+    return { id, name, lastname, email, role }
+  })
   const result = {
     page: page ?? '',
     limit: limit ?? '',
-    total: users.length,
-    results: users,
+    total: usersClear.length,
+    results: usersClear,
   }
   if (page !== null && limit !== null) {
     const startIndex = (page - 1) * limit // offset
     const endIndex = startIndex + limit
-    result.results = users.slice(startIndex, endIndex)
+    result.results = usersClear.slice(startIndex, endIndex)
   }
   return result
 }
@@ -45,17 +27,6 @@ async function getUserById(id) {
     if (!user) throw new Error('User id not found')
     return user
   }
-}
-
-async function createUser(data) {
-  const users = await readData()
-  const newUser = {
-    id: crypto.randomUUID(),
-    ...data,
-  }
-  users.push(newUser)
-  await writeData(users)
-  return newUser
 }
 
 async function updateUserById(id, data) {
@@ -98,7 +69,6 @@ async function deleteUserById(id) {
 module.exports = {
   getAllUsers,
   getUserById,
-  createUser,
   updateUserById,
   patchUserById,
   deleteUserById
