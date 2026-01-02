@@ -1,12 +1,17 @@
-const { getAllUsers, getUserById, createUser, updateUserById, patchUserById, deleteUserById } = require('../core/userStorage')
-const { validUUID, validateFields } = require('../utils/utils')
-const { bodyParser } = require('../utils/bodyParser')
+const {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUserById,
+  patchUserById,
+  deleteUserById,
+} = require('../core/userStorage')
+const { validateFields } = require('../utils/utils')
 const {
   badRequest,
   created,
   ok,
-  unsupportedMedia,
-  okNoContent
+  okNoContent,
 } = require('../utils/sendResponse')
 
 async function getUsers(req, res, searchParams) {
@@ -57,12 +62,11 @@ async function getUser(req, res, id) {
 
 async function postUser(req, res) {
   try {
-    await bodyParser(req, res)
     const { name, lastname, email } = req.body
     if (!name || !lastname || !email) {
       return badRequest(res, 'name, lastname and email are necesary')
     }
-  
+
     const newUser = await createUser({ name, lastname, email })
     created(res, newUser)
   } catch (err) {
@@ -72,12 +76,11 @@ async function postUser(req, res) {
 
 async function putUser(req, res, id) {
   try {
-    await bodyParser(req, res)
     const { name, lastname, email } = req.body
     if (!name || !lastname || !email) {
       return badRequest(res, 'name, lastname and email are necesary')
     }
-    
+
     const updatedUser = await updateUserById(id, { name, lastname, email })
 
     ok(res, updatedUser)
@@ -88,7 +91,6 @@ async function putUser(req, res, id) {
 
 async function patchUser(req, res, id) {
   try {
-    await bodyParser(req, res)
     const { name, lastname, email } = req.body
     if (!name && !lastname && !email) {
       return badRequest(res, 'At least one field is required')
@@ -119,5 +121,5 @@ module.exports = {
   postUser,
   putUser,
   patchUser,
-  deleteUser
+  deleteUser,
 }
