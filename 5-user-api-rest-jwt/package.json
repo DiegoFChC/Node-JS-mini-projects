@@ -1,0 +1,13 @@
+{
+  "name": "5-user-api-rest-jwt",
+  "version": "1.0.0",
+  "description": "A simple REST API built with Node.js using only native modules (http, fs, url, etc.), without Express or any external framework. JWT.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
