@@ -2,7 +2,7 @@ const { validUUID } = require('../utils/validUUID')
 const { badRequest } = require('../utils/sendResponse')
 
 function validUUIDMiddleware(req, res, next) {
-  const id = req.urlParts[1]
+  const id = req.slug
 
   if (!validUUID(id)) {
     return badRequest(res, 'Invalid user id')

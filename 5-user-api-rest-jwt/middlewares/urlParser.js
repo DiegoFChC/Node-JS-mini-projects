@@ -9,7 +9,7 @@ function urlParser(req, res, next) {
   const contentType = req.headers['content-type']
 
   const { pathname, searchParams } = new URL(`http://${host}${url}`)
-  const urlParts = pathname.split('/').filter(Boolean)
+  const [base, slug] = pathname.split('/').filter(Boolean)
 
   let searchParamsList = {}
   for (const [key, value] of searchParams.entries()) {
@@ -17,7 +17,8 @@ function urlParser(req, res, next) {
   }
 
   req.pathname = pathname
-  req.urlParts = urlParts
+  req.base = base
+  req.slug = slug
   req.searchParams = searchParamsList
   req.contentType = contentType
 

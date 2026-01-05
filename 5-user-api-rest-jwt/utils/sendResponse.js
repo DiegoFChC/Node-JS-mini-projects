@@ -17,6 +17,11 @@ const unsupportedMedia = (res) =>
   send(res, 415, { message: 'Unsupported Media Type' })
 const internalServerError = (res) =>
   send(res, 500, { message: 'Internal Server Error' })
+const unauthorized = (res, message = 'Unauthorized') => 
+  send(res, 401, { message })
+const forbidden = (res, message = 'Forbidden') => {
+  send(res, 403, { message })
+}
 
 module.exports = {
   ok,
@@ -25,5 +30,7 @@ module.exports = {
   notFound,
   unsupportedMedia,
   okNoContent,
-  internalServerError
+  internalServerError,
+  unauthorized,
+  forbidden
 }

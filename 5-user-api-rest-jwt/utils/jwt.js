@@ -10,6 +10,11 @@ function base64url(input) {
     .replace(/\//g, '_') // -> Cambia / por _
 }
 
+function base64urlDecode(input) {
+  input = input.replace(/-/g, '+').replace(/_/g, '/')
+  return JSON.parse(Buffer.from(input, 'base64').toString('utf8'))
+}
+
 function sign(data, secret) {
   return crypto
     .createHmac('sha256', secret)
@@ -37,5 +42,30 @@ function createJWT(payload) {
   return `${encodedHeader}.${encodedPayload}.${signature}`
 }
 
+function verifyJWT(token) {
+  if (!token) {
+    throw new Error('Token missing')
+  }
 
-module.exports = { createJWT }
+  const parts = token.split('.')
+  const [header, payload, signatue] = parts
+
+  // Verificación de firma
+  const expectedSignature = sign(`${header}.${payload}`, JWT_SECRET)
+
+  if (signatue !== expectedSignature) {
+    throw new Error('Invalid token signature')
+  }
+
+  const decodedPayload = base64urlDecode(payload)
+
+  // Expiración
+  const now = Math.floor(Date.now() / 1000)
+  if (decodedPayload.exp && decodedPayload.exp < now) {
+    throw new Error('Token expired')
+  }
+
+  return decodedPayload
+}
+
+module.exports = { createJWT, verifyJWT }
