@@ -33,7 +33,12 @@ async function findRefreshTokenByHash(token) {
   } catch (err) {
     throw new Error(err.message)
   }
+}
 
+async function findRefreshTokenForLogout(token) {
+  const data = await readData(REFRESH_TOKENS_PATH)
+
+  return data.find(item => compareHash(item.tokenHash, token)) || null
 }
 
 async function revokeRefreshToken(tokenId, replacedBy = null) {
@@ -77,5 +82,6 @@ module.exports = {
   findRefreshTokenByHash,
   revokeRefreshToken,
   revokeAllUserTokens,
-  deleteExpiredTokens
+  deleteExpiredTokens,
+  findRefreshTokenForLogout
 }

@@ -8,6 +8,8 @@ const { createRefreshToken } = require('../utils/refreshToken')
 const { saveRefreshToken } = require('./refreshTokens.service')
 const { USERS_DATA_PATH } = require('./constants')
 
+const EXPIRED_MINUTES = 15
+
 async function createUser(data) {
   const users = await readData(USERS_DATA_PATH)
   const { email, password, admin, name, lastname } = data
@@ -53,7 +55,7 @@ async function loginUser(data) {
     sub: user.id,
     role: user.role,
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+    exp: Math.floor(Date.now() / 1000) + EXPIRED_MINUTES * 60,
   })
 
   const { newRefreshToken, token } = createRefreshToken(user.id)

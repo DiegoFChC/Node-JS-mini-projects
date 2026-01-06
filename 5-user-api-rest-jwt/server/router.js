@@ -4,6 +4,7 @@ const { validUUIDMiddleware } = require('../middlewares/validUUID')
 const { authMiddleware } = require('../middlewares/authMiddleware')
 const { roleMiddleware } = require('../middlewares/roleMiddleware')
 const { ownershipMiddleware } = require('../middlewares/ownershipMiddleware ')
+const { cookieParser } = require('../middlewares/cookieParser')
 const {
   getUser,
   getUsers,
@@ -11,12 +12,18 @@ const {
   patchUser,
   deleteUser,
 } = require('../routes/users.routes')
-const { postUser, login, refresh } = require('../routes/auth.routes')
+const {
+  postUser,
+  login,
+  refresh,
+  logout,
+  logoutAll,
+} = require('../routes/auth.routes')
 const { ok, notFound } = require('../utils/sendResponse')
 
 async function router(req, res) {
   urlParser(req, res, () => {
-    const { url, method, searchParams, base, slug } = req
+    const { url, method, searchParams, base, slug, optional } = req
 
     if (method === 'GET' && url === '/') {
       return ok(res, { message: 'Welcome to my server' })
@@ -72,7 +79,17 @@ async function router(req, res) {
         return bodyParser(req, res, () => login(req, res))
       }
       if (method === 'POST' && slug === 'refresh') {
-        return bodyParser(req, res, () => refresh(req, res))
+        return cookieParser(req, res, () => refresh(req, res))
+      }
+      if (method === 'POST' && slug === 'logout' && !optional) {
+        return authMiddleware(req, res, () =>
+          cookieParser(req, res, () => logout(req, res))
+        )
+      }
+      if (method === 'POST' && slug === 'logout' && optional === 'all') {
+        return authMiddleware(req, res, () =>
+          cookieParser(req, res, () => logoutAll(req, res))
+        )
       }
     }
     notFound(res)

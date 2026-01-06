@@ -5,6 +5,7 @@ const {
   revokeAllUserTokens,
   revokeRefreshToken,
   saveRefreshToken,
+  findRefreshTokenForLogout
 } = require('../core/refreshTokens.service')
 const { getUserById } = require('../core/user.service')
 const { createJWT } = require('../utils/jwt')
@@ -36,8 +37,22 @@ async function login(req, res) {
       return badRequest(res, 'email and password are required')
     }
 
-    const result = await loginUser({ email, password })
-    return ok(res, result)
+    const { accessToken, refreshToken, expiresInSeconds } = await loginUser({
+      email,
+      password,
+    })
+
+    const cookieOptions = [
+      `refreshToken=${refreshToken}`,
+      'HttpOnly',
+      'Path=/auth',
+      `Max-Age=${expiresInSeconds}`,
+      'SameSite=Lax',
+    ]
+
+    res.setHeader('Set-Cookie', cookieOptions.join('; '))
+
+    return ok(res, { accessToken })
   } catch (err) {
     return badRequest(res, err.message)
   }
@@ -45,14 +60,10 @@ async function login(req, res) {
 
 async function refresh(req, res) {
   try {
-    const { token: tokenReceived } = req.body
+    const { refreshToken } = req.cookies
 
-    if (!tokenReceived) {
-      return badRequest(res, 'token is required')
-    }
-
-    const currentRefreshToken = await findRefreshTokenByHash(tokenReceived)
-    const { userId } = currentRefreshToken
+    const currentRefreshToken = await findRefreshTokenByHash(refreshToken)
+    const { id, userId } = currentRefreshToken
 
     const currentUser = await getUserById(userId)
 
@@ -63,18 +74,84 @@ async function refresh(req, res) {
       exp: Math.floor(Date.now() / 1000) + 60 * 60,
     })
 
-    const { newRefreshToken, token } = createRefreshToken(currentUser.id)
+    const { newRefreshToken, token, expiresInSeconds } = createRefreshToken(
+      currentUser.id
+    )
 
     await saveRefreshToken(newRefreshToken)
-    await revokeRefreshToken(currentRefreshToken.id, newRefreshToken.id)
+    await revokeRefreshToken(id, newRefreshToken.id)
+
+    const cookieOptions = [
+      `refreshToken=${token}`,
+      'HttpOnly',
+      'Path=/auth',
+      `Max-Age=${expiresInSeconds}`,
+      'SameSite=Lax',
+    ]
+
+    res.setHeader('Set-Cookie', cookieOptions.join('; '))
 
     return ok(res, {
       accessToken: newAccessToken,
-      refreshToken: token,
     })
   } catch (err) {
     return badRequest(res, err.message)
   }
 }
 
-module.exports = { postUser, login, refresh }
+async function logout(req, res) {
+  try {
+    const { refreshToken } = req.cookies
+
+    if (refreshToken) {
+      const storedToken = await findRefreshTokenForLogout(refreshToken)
+      if (storedToken && !storedToken.revoked) {
+        await revokeRefreshToken(storedToken.id)
+      }
+    }
+
+    const cookieOptions = [
+      `refreshToken=`,
+      'HttpOnly',
+      'Path=/auth',
+      `Max-Age=0`,
+      'SameSite=Lax',
+    ]
+
+    res.setHeader('Set-Cookie', cookieOptions.join('; '))
+
+    return ok(res)
+  } catch (err) {
+    return ok(res)
+  }
+}
+
+async function logoutAll(req, res) {
+  try {
+    const { refreshToken } = req.cookies
+    
+    if (refreshToken) {
+      const storedToken = await findRefreshTokenForLogout(refreshToken)
+
+      if (storedToken && !storedToken.revoked) {
+        await revokeAllUserTokens(storedToken.userId)
+      }
+    }
+
+    const cookieOptions = [
+      `refreshToken=`,
+      'HttpOnly',
+      'Path=/auth',
+      `Max-Age=0`,
+      'SameSite=Lax',
+    ]
+
+    res.setHeader('Set-Cookie', cookieOptions.join('; '))
+
+    return ok(res)
+  } catch (err) {
+    return ok(res)
+  }
+}
+
+module.exports = { postUser, login, refresh, logout, logoutAll }
