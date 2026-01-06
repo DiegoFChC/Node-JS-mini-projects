@@ -1,22 +1,19 @@
-const { join } = require('node:path')
 const { readFile, writeFile } = require('node:fs/promises')
-
 const { validateEmail } = require('../utils/validateEmail')
+const { USERS_DATA_PATH } = require('./constants')
 
-const PATH_DATA = join(process.cwd(), 'data', 'users.json')
-
-async function readData() {
+async function readData(path) {
   try {
-    const data = await readFile(PATH_DATA, 'utf8')
+    const data = await readFile(path, 'utf8')
     return data !== '' ? JSON.parse(data) : []
   } catch {
     throw new Error('An error has ocurred while loading data')
   }
 }
 
-async function writeData(data) {
+async function writeData(path, data) {
   try {
-    await writeFile(PATH_DATA, JSON.stringify(data))
+    await writeFile(path, JSON.stringify(data))
   } catch (err) {
     throw new Error('An error has ocurred while writing data')
   }
@@ -27,7 +24,7 @@ async function validateEmailExists(email) {
     throw new Error('Invalid email format')
   }
 
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const exists = users.find((user) => user.email === email)
 
   if (exists !== undefined) {

@@ -11,13 +11,13 @@ const {
   patchUser,
   deleteUser,
 } = require('../routes/users.routes')
-const { postUser, login } = require('../routes/auth.routes')
+const { postUser, login, refresh } = require('../routes/auth.routes')
 const { ok, notFound } = require('../utils/sendResponse')
 
 async function router(req, res) {
   urlParser(req, res, () => {
     const { url, method, searchParams, base, slug } = req
-    console.log(base, slug)
+
     if (method === 'GET' && url === '/') {
       return ok(res, { message: 'Welcome to my server' })
     }
@@ -70,6 +70,9 @@ async function router(req, res) {
       }
       if (method === 'POST' && slug === 'login') {
         return bodyParser(req, res, () => login(req, res))
+      }
+      if (method === 'POST' && slug === 'refresh') {
+        return bodyParser(req, res, () => refresh(req, res))
       }
     }
     notFound(res)

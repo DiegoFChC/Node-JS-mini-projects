@@ -4,9 +4,12 @@ const { validateEmail } = require('../utils/validateEmail')
 const { validateEmailExists } = require('./storage.service')
 const { readData, writeData } = require('./storage.service')
 const { createJWT } = require('../utils/jwt')
+const { createRefreshToken } = require('../utils/refreshToken')
+const { saveRefreshToken } = require('./refreshTokens.service')
+const { USERS_DATA_PATH } = require('./constants')
 
 async function createUser(data) {
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const { email, password, admin, name, lastname } = data
 
   await validateEmailExists(email)
@@ -21,7 +24,7 @@ async function createUser(data) {
     role: admin ? 'admin' : 'user',
   }
   users.push(newUser)
-  await writeData(users)
+  await writeData(USERS_DATA_PATH, users)
   return {
     id: newUser.id,
     name: newUser.name,
@@ -38,7 +41,7 @@ async function loginUser(data) {
     throw new Error('Invalid email format')
   }
 
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const user = users.find((user) => user.email === email)
 
   if (!user) throw new Error('Invalid credentials')
@@ -46,14 +49,17 @@ async function loginUser(data) {
   if (!comparePassword(user.password, password))
     throw new Error('Invalid credentials')
 
-  const token = createJWT({
+  const accessToken = createJWT({
     sub: user.id,
     role: user.role,
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 60 * 60,
   })
 
-  return { token }
+  const { newRefreshToken, token } = createRefreshToken(user.id)
+  await saveRefreshToken(newRefreshToken)
+
+  return { accessToken, refreshToken: token }
 }
 
 module.exports = { createUser, loginUser }

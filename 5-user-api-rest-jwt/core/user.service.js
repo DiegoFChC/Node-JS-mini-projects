@@ -1,7 +1,8 @@
 const { readData, writeData } = require('./storage.service')
+const { USERS_DATA_PATH } = require('./constants')
 
 async function getAllUsers(page, limit) {
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const usersClear = users.map((user) => {
     const { id, name, lastname, email, role } = user
     return { id, name, lastname, email, role }
@@ -21,7 +22,7 @@ async function getAllUsers(page, limit) {
 }
 
 async function getUserById(id) {
-  const data = await readData()
+  const data = await readData(USERS_DATA_PATH)
   if (data) {
     const user = data.find((user) => user.id === id)
     if (!user) throw new Error('User id not found')
@@ -33,13 +34,13 @@ async function updateUserById(id, data) {
   await getUserById(id)
 
   const newData = { id, ...data }
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const userIndex = users.findIndex((item) => item.id === id)
 
   if (userIndex === -1) throw new Error('User index not found')
 
   users[userIndex] = newData
-  await writeData(users)
+  await writeData(USERS_DATA_PATH, users)
   return newData
 }
 
@@ -47,23 +48,23 @@ async function patchUserById(id, data) {
   const user = await getUserById(id)
 
   const newData = { ...user, ...data }
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const userIndex = users.findIndex((item) => item.id === id)
 
   if (userIndex === -1) throw new Error('User index not found')
 
   users[userIndex] = newData
-  await writeData(users)
+  await writeData(USERS_DATA_PATH, users)
   return newData
 }
 
 async function deleteUserById(id) {
   await getUserById(id)
 
-  const users = await readData()
+  const users = await readData(USERS_DATA_PATH)
   const newUsers = users.filter((item) => item.id !== id)
 
-  await writeData(newUsers)
+  await writeData(USERS_DATA_PATH, newUsers)
 }
 
 module.exports = {
