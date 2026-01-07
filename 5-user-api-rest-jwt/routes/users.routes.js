@@ -60,6 +60,16 @@ async function getUser(req, res, id) {
   }
 }
 
+async function getUserMe(req, res) {
+  try {
+    const { sub } = req.user
+    const user = await getUserById(sub)
+    ok(res, user)
+  } catch (err) {
+    badRequest(res, err.message)
+  }
+}
+
 async function putUser(req, res, id) {
   try {
     const { name, lastname, email } = req.body
@@ -107,4 +117,5 @@ module.exports = {
   putUser,
   patchUser,
   deleteUser,
+  getUserMe
 }

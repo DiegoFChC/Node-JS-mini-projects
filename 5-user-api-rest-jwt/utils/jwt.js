@@ -1,4 +1,5 @@
 const crypto = require('node:crypto')
+const { isBlacklisted } = require('../core/blackList.service')
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -42,7 +43,7 @@ function createJWT(payload) {
   return `${encodedHeader}.${encodedPayload}.${signature}`
 }
 
-function verifyJWT(token) {
+async function verifyJWT(token) {
   if (!token) {
     throw new Error('Token missing')
   }
@@ -58,6 +59,12 @@ function verifyJWT(token) {
   }
 
   const decodedPayload = base64urlDecode(payload)
+
+  // Verificacion en blackList
+  const blackListed = await isBlacklisted(decodedPayload.jti)
+  if (blackListed) {
+    throw new Error('Token in blackList')
+  }
 
   // Expiración
   const now = Math.floor(Date.now() / 1000)

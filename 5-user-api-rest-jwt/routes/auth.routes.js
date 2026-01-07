@@ -1,4 +1,5 @@
 const { createUser, loginUser } = require('../core/auth.service')
+const { addToBlacklist } = require('../core/blackList.service')
 const {
   deleteExpiredTokens,
   findRefreshTokenByHash,
@@ -101,6 +102,7 @@ async function refresh(req, res) {
 
 async function logout(req, res) {
   try {
+    const { jti, exp } = req.user
     const { refreshToken } = req.cookies
 
     if (refreshToken) {
@@ -109,6 +111,8 @@ async function logout(req, res) {
         await revokeRefreshToken(storedToken.id)
       }
     }
+
+    await addToBlacklist(jti, exp)
 
     const cookieOptions = [
       `refreshToken=`,
@@ -128,6 +132,7 @@ async function logout(req, res) {
 
 async function logoutAll(req, res) {
   try {
+    const { jti, exp } = req.user
     const { refreshToken } = req.cookies
     
     if (refreshToken) {
@@ -137,6 +142,8 @@ async function logoutAll(req, res) {
         await revokeAllUserTokens(storedToken.userId)
       }
     }
+
+    await addToBlacklist(jti, exp)
 
     const cookieOptions = [
       `refreshToken=`,

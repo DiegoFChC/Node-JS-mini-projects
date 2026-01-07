@@ -26,7 +26,10 @@ async function getUserById(id) {
   if (data) {
     const user = data.find((user) => user.id === id)
     if (!user) throw new Error('User id not found')
-    return user
+
+    const { id: userId, name, lastname, email, role } = user
+    const userClear = { id: userId, name, lastname, email, role }
+    return userClear
   }
 }
 
@@ -72,5 +75,5 @@ module.exports = {
   getUserById,
   updateUserById,
   patchUserById,
-  deleteUserById
+  deleteUserById,
 }

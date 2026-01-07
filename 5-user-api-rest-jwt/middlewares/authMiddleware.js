@@ -1,7 +1,7 @@
 const { unauthorized } = require('../utils/sendResponse')
 const { verifyJWT } = require('../utils/jwt')
 
-function authMiddleware (req, res, next) {
+async function authMiddleware (req, res, next) {
   const authHeader = req.headers.authorization
 
   if (!authHeader) {
@@ -15,7 +15,7 @@ function authMiddleware (req, res, next) {
   }
 
   try {
-    const payload = verifyJWT(token)
+    const payload = await verifyJWT(token)
     req.user = payload
     next()
   } catch (err) {

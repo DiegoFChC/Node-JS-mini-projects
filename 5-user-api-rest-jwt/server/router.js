@@ -11,6 +11,7 @@ const {
   putUser,
   patchUser,
   deleteUser,
+  getUserMe,
 } = require('../routes/users.routes')
 const {
   postUser,
@@ -30,12 +31,15 @@ async function router(req, res) {
     }
 
     if (base === 'users') {
-      if (method === 'GET' && slug) {
+      if (method === 'GET' && slug && slug !== 'me') {
         return authMiddleware(req, res, () =>
           validUUIDMiddleware(req, res, () =>
             ownershipMiddleware(req, res, () => getUser(req, res, slug))
           )
         )
+      }
+      if (method === 'GET' && slug === 'me') {
+        return authMiddleware(req, res, () => getUserMe(req, res))
       }
       if (method === 'GET') {
         return authMiddleware(req, res, () =>

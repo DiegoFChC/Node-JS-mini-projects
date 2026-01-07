@@ -54,6 +54,7 @@ async function loginUser(data) {
   const accessToken = createJWT({
     sub: user.id,
     role: user.role,
+    jti: crypto.randomUUID(),
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + EXPIRED_MINUTES * 60,
   })
