@@ -13,18 +13,18 @@ function bodyParser(req, res, next) {
 
   req.on('end', () => {
     if (body.length === 0) {
-      badRequest(res, 'Data not received')
+      return badRequest(res, 'Data not received')
     }
     try {
       req.body = body ? JSON.parse(body) : {}
       next()
     } catch {
-      badRequest(res, 'Invalid JSON format')
+      return badRequest(res, 'Invalid JSON format')
     }
   })
 
   req.on('error', (err) => {
-    internalServerError(res)
+    return internalServerError(res)
   })
 }
 

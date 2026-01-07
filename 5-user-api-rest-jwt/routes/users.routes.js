@@ -1,12 +1,12 @@
+const { createUser } = require('../core/auth.service')
 const {
   getAllUsers,
   getUserById,
-  createUser,
   updateUserById,
   patchUserById,
   deleteUserById,
-} = require('../core/userStorage')
-const { validateFields } = require('../utils/utils')
+} = require('../core/user.service')
+const { validateFields } = require('../utils/validateFields')
 const {
   badRequest,
   created,
@@ -60,17 +60,13 @@ async function getUser(req, res, id) {
   }
 }
 
-async function postUser(req, res) {
+async function getUserMe(req, res) {
   try {
-    const { name, lastname, email } = req.body
-    if (!name || !lastname || !email) {
-      return badRequest(res, 'name, lastname and email are necesary')
-    }
-
-    const newUser = await createUser({ name, lastname, email })
-    created(res, newUser)
+    const { sub } = req.user
+    const user = await getUserById(sub)
+    ok(res, user)
   } catch (err) {
-    return badRequest(res, err.message)
+    badRequest(res, err.message)
   }
 }
 
@@ -118,8 +114,8 @@ async function deleteUser(req, res, id) {
 module.exports = {
   getUsers,
   getUser,
-  postUser,
   putUser,
   patchUser,
   deleteUser,
+  getUserMe
 }
