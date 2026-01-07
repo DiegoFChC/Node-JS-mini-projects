@@ -30,6 +30,9 @@ A modular notification system built with Node.js, designed to learn event-driven
 4. **🧩 Node REST API**
 A simple REST API built with Node.js using only native modules (http, fs, url, etc.), without Express or any external framework.
 
+1. **🔐 Node REST API with Authentication**
+This project extends a basic REST API into a fully authenticated system, implementing JWT, refresh tokens, cookies, role-based access control, and security mechanisms
+
 ## 🧑‍💻 Author
 
 [Diego F. Chaverra C.](https://github.com/DiegoFChC)
