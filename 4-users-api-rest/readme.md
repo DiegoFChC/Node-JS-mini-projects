@@ -27,10 +27,7 @@ Perfect for learning how to create a basic server with Node.js
 
 ```bash
 /
-│ index.js                          # Entry point, creates and starts the HTTP server
-│
-├── router/
-│   └── router.js                   # Main request router
+s
 │
 ├── routes/
 │   └── users.routes.js             # User-related controllers (handlers)
