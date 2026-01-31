@@ -11,14 +11,14 @@ const defautls: CookieOptions = {
   secure,
 }
 
-function getAccessTokenCookieOptions(): CookieOptions {
+export function getAccessTokenCookieOptions(): CookieOptions {
   return {
     ...defautls,
     expires: fifteenMinutesFromNow()
   }
 }
 
-function getRefreshTokenCookieOptions(): CookieOptions {
+export function getRefreshTokenCookieOptions(): CookieOptions {
   return {
     ...defautls,
     expires: thirtyDaysFromNow(),
