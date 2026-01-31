@@ -7,6 +7,7 @@ import { verificationCodeModel } from '../models/verificationCode.model'
 import { appAssert } from '../utils/appAssert'
 import { oneYearFromNow } from '../utils/date'
 import jwt from 'jsonwebtoken'
+import { refreshTokenSignOptions, signToken } from '../utils/jwt'
 
 export type CreateAccountParams = {
   email: string
@@ -27,9 +28,11 @@ export async function createAccount(data: CreateAccountParams) {
     email: data.email,
     password: data.password
   })
+  const userId = user._id
+
   // create cerification code
   const verificationCode = await verificationCodeModel.create({
-    userId: user._id,
+    userId,
     type: VerificationCodeType.EmailVerification,
     expiresAt: oneYearFromNow()
   })
@@ -38,31 +41,17 @@ export async function createAccount(data: CreateAccountParams) {
 
   // create session
   const session = await SessionModel.create({
-    userId: user._id,
+    userId,
     userAgent: data.userAgent
   })
 
   // sign access token & refresh token
-  const refreshToken = jwt.sign(
-    { sessionId: session._id },
-    JWT_REFRESH_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '30d'
-    }
-  )
+  const refreshToken = signToken({ sessionId: session._id }, refreshTokenSignOptions)
 
-  const accessToken = jwt.sign(
-    {
-      userId: user._id,
-      sessionId: session._id
-    },
-    JWT_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '15m'
-    }
-  )
+  const accessToken = signToken({
+    userId,
+    sessionId: session._id
+  })
 
   // return user & tokens
   return {
@@ -100,26 +89,12 @@ export async function loginUser({ email, password, userAgent }: LoginParams) {
   }
 
   // sign access token & refresh token
-  const refreshToken = jwt.sign(
-    sessionInfo,
-    JWT_REFRESH_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '30d'
-    }
-  )
+  const refreshToken = signToken(sessionInfo, refreshTokenSignOptions)
 
-  const accessToken = jwt.sign(
-    {
-      ...sessionInfo,
-      userId: user._id
-    },
-    JWT_SECRET,
-    {
-      audience: ['user'],
-      expiresIn: '15m'
-    }
-  )
+  const accessToken = signToken({
+    ...sessionInfo,
+    userId: user._id
+  })
 
   // return user & tokens
   return {
