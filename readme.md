@@ -16,22 +16,30 @@ The goal of this folder is to practice Node.js through practical and incremental
 ## 📌 Current Projects
 
 1. **💻 Custom Console (Two Versions)**
+
 A small custom shell written in Node.js, built in two modes:
 
 * `index_consola.js`: Reads user commands directly from the terminal using readline.
 * `index_text_file.js`: Uses a .txt file as a simulated console, detecting changes with fs.watch.
 
 2. **🔔 Node Notification System (v1)**
+
 A small notification system built with Node.js using the native `EventEmitter`.
 
 3. **🔔 Node Notification System (v2) - Persistence - Logs**
+
 A modular notification system built with Node.js, designed to learn event-driven architecture, persistence, and logging using the native EventEmitter.
 
 4. **🧩 Node REST API**
 A simple REST API built with Node.js using only native modules (http, fs, url, etc.), without Express or any external framework.
 
-1. **🔐 Node REST API with Authentication**
+5. **🔐 Node REST API with Authentication**
+
 This project extends a basic REST API into a fully authenticated system, implementing JWT, refresh tokens, cookies, role-based access control, and security mechanisms
+
+6. **🚀 Fullstack TODO App (Node.js + Vanilla JS)**
+
+A fullstack task management application built entirely with Node.js (no frameworks) and Vanilla JavaScript.
 
 ## 🧑‍💻 Author
 
