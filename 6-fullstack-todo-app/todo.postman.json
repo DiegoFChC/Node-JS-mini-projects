@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "a7ec0c75-9a2f-4e91-9ff2-698cf835a63c",
+    "name": "Todo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25010091"
+  },
+  "item": [
+    {
+      "name": "tasks",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Conduct a digital spring cleaning\",\r\n    \"description\": \"Spend an hour organizing your digital life by deleting blurry or duplicate photos, uninstalling apps you haven't opened in months, and unsubscribing from marketing emails that clutter your inbox every morning. This helps improve your device's performance and reduces mental fatigue from digital noise.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/task",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Study JavaScript\",\r\n    \"description\": \"I need to study programing.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/task/9279b18f-2933-4ff6-b6bb-758da1b8979b",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task",
+                "9279b18f-2933-4ff6-b6bb-758da1b8979b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Diego\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/task/cdadb169-9245-4ede-b625-baf2c8b06bcf",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task",
+                "cdadb169-9245-4ede-b625-baf2c8b06bcf"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/task?page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get task",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/task/9279b18f-2933-4ff6-b6bb-758da1b8979b",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task",
+                "9279b18f-2933-4ff6-b6bb-758da1b8979b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change state",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/task/toggle/c28eaf8f-1c38-43ab-84d4-f8bbbc14edff",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "task",
+                "toggle",
+                "c28eaf8f-1c38-43ab-84d4-f8bbbc14edff"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}

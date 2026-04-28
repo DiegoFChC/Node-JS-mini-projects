@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Todo app</title>
+  </head>
+  <body>
+    <header class="header">
+      <button id="btn-new-task">Create Task</button>
+    </header>
+
+    <h1>TODO App</h1>
+
+    <ul id="task-list"></ul>
+    <div id="pagination"></div>
+
+    <section class="task-modal create">
+      <form id="create-task">
+        <button class="btn-close-modal create" type="button">×</button>
+        <h2>Create a new task</h2>
+        <p>Here you can register new tasks.</p>
+        <div class="custom-input">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder=""
+            autocomplete="off"
+            required
+          />
+          <label for="title">Title</label>
+        </div>
+        <div class="custom-text-area">
+          <textarea
+            type="text"
+            id="description"
+            name="description"
+            placeholder=""
+            autocomplete="off"
+            required
+            rows='10'
+            cols='20'
+          ></textarea>
+          <label for="description">Description</label>
+        </div>
+        <button class="btn-send" type="submit">Create task</button>
+      </form>
+    </section>
+
+    <section class="task-modal edit">
+      <form id="edit-task">
+        <button class="btn-close-modal edit" type="button">×</button>
+        <h2>Edit an existing task</h2>
+        <p>Here you can edit an existing task.</p>
+        <div class="custom-input">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder=""
+            autocomplete="off"
+            required
+          />
+          <label for="title">Title</label>
+        </div>
+        <div class="custom-text-area">
+          <textarea
+            type="text"
+            id="description"
+            name="description"
+            placeholder=""
+            autocomplete="off"
+            required
+            rows='10'
+            cols='20'
+          ></textarea>
+          <label for="description">Description</label>
+        </div>
+        <button class="btn-send" type="submit">Update task</button>
+      </form>
+    </section>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
