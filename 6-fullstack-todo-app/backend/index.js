@@ -1,19 +1,14 @@
 const http = require('node:http')
 const { tasksRoutes } = require('./routes/tasks.routes')
 const { urlParser } = require('./middlewares/urlParser')
+const { corsMiddleware } = require('./middlewares/cors')
 
 const PORT = process.env.PORT ?? 3002
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, POST, PATCH, DELETE')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  const isPreflight = corsMiddleware(req, res)
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204)
-    res.end()
-    return
-  }
+  if (isPreflight) return
 
   urlParser(req, res, () => tasksRoutes(req, res))
 })
